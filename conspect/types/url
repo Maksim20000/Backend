@@ -1,0 +1,20 @@
+app.get('/products/:id', (req: Request, res: Response) => {
+    let id = req.params.id
+    let elementProduct = products.find( p => p.id === +id)
+
+    if(elementProduct){
+        res.send(elementProduct)
+    }else{
+        res.send(404)
+    }
+})
+
+app.get('/address/:idUser', (req: Request, res: Response) => {
+    let UserId = req.params.idUser
+    let elementAddressId = address.find( a => a.id === +UserId)
+    if(elementAddressId){
+        res.send(elementAddressId)
+    }else{
+        res.send(404)
+    }
+})

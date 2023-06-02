@@ -1,2 +1,16 @@
 1) вызываю с помощью команды
     npx tsc -w
+
+2) метод find
+    let tomato = products.find( p => p.title === 'tomato')
+
+3) чтобы обращаться к uri параметрам на express нужно в url использоватль (/products/:productTitle)
+
+4) метод send работает так что если мы ему подсовываем json то он реагирует  как на статус код 404 или 303 200
+     400 ошибка - ошибка клента
+
+5) чтобы взять из url параметр используем команду
+        let reqTetleProduct = req.params.productTitle
+
+6) query параметры(http://localhost:3000/products?title=з)
+
