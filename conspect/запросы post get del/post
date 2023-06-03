@@ -1,0 +1,13 @@
+import bodyParser from "body-parser";
+
+const middleWare = bodyParser({})
+app.use(middleWare)
+
+1) app.post('/products', (req: Request, res: Response) => {
+       const newProduct = {
+               id: 5,
+               title: req.body.title
+           }
+       products.push(newProduct)
+       res.status(201).send(newProduct)
+   })

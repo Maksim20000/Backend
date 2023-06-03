@@ -1,0 +1,25 @@
+1)app.get('/tovars', (req, res) => {
+    res.send(tovars)
+})
+
+2) с query параметрами
+app.get('/products', (req: Request, res: Response) => {
+       if(req.query.title){
+           let searchString = req.query.title
+           res.send(products.filter( p => p.title.indexOf(searchString.toString()) > -1))
+       }else{
+           res.send(products)
+       }
+   })
+
+3)
+app.get('/products/:id', (req: Request, res: Response) => {
+       let id = req.params.id
+       let elementProduct = products.find( p => p.id === +id)
+
+       if(elementProduct){
+           res.send(elementProduct)
+       }else{
+           res.send(404)
+       }
+   })

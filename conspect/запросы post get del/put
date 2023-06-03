@@ -1,0 +1,7 @@
+1) app.put('/address/:id', (req: Request, res: Response) => {
+       let addressUpdate = address.find(p => p.id === +req.params.id)
+       if(addressUpdate){
+           addressUpdate.value = req.body.value
+           res.send(addressUpdate)
+       }
+   })
