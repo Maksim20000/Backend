@@ -1,64 +1,53 @@
 import {Request, Response, Router} from "express";
+import {productsRepositiry} from "../repositories/products-repositiry";
 
 
-const products= [{id: 1, title: 'tomato'}, {id:2, title: 'potato'}, {id: 3, title: 'lalla'}]
 export const productsRouter = Router({})
 
+// функция которая ищет продукты по query
 productsRouter.get('/', (req: Request, res: Response) => {
-    if(req.query.title){
-        let searchString = req.query.title
-        res.send(products.filter( p => p.title.indexOf(searchString.toString()) > -1))
-    }else{
-        res.send(products)
-    }
+    const foundProducts = productsRepositiry.findProducts(req.query.title ? req.query.title.toString() : null)
+    res.send(foundProducts).status(400)
 })
 
 productsRouter.put('/:id', (req: Request, res: Response) => {
-    let product = products.find(p => p.id === +req.params.id)
-    if(product){
-        product.title = req.body.title
+    let bodyTitle = req.body.title
+    let id = +req.params.id
+    let UpdateNewProduct = productsRepositiry.updateProducts(id, bodyTitle)
+
+    if(UpdateNewProduct){
+        let product = productsRepositiry.getProductById(id)
         res.send(product)
-    }else{
-        res.send(404)
+    }else {
+        res.status(404)
     }
 })
 
-
+// содает новый продукт
 productsRouter.post('/', (req: Request, res: Response) => {
-    const newProduct = {
-        id: 5,
-        title: req.body.title
-    }
-    products.push(newProduct)
-    res.status(201).send(newProduct)
+    let newProduct = productsRepositiry.createProduct(req.body.title)
+    res.send(newProduct)
 })
 
 
 
 productsRouter.get('/:id', (req: Request, res: Response) => {
     let id = req.params.id
-    let elementProduct = products.find( p => p.id === +id)
+    let product = productsRepositiry.getProductById(+id)
 
-    if(elementProduct){
-        res.send(elementProduct)
+    if(product){
+        res.send(product)
     }else{
         res.send(404)
     }
 })
 
-
-
-
-// productsRouter.delete('/:id', (req: Request, res: Response) => {
-//     let id = req.params.id
-//     let elementProduct = products.find( p => p.id === +id)
-//
-//     for(let i = 0; i < products.length; i++) {
-//         if (products[i].id === +req.params.id) {
-//             products.splice(i, 1)
-//             res.send(204)
-//             return
-//         }
-//     }
-//         res.send(404)
-//     })
+productsRouter.delete('/:id', (req: Request, res: Response) => {
+    let id = req.params.id
+    let isDeleted = productsRepositiry.deleteProduct(+id)
+    if(isDeleted){
+        res.send(204)
+    }else{
+        res.send(404)
+    }
+    })
