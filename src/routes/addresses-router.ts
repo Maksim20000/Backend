@@ -1,50 +1,39 @@
 import {Request, Response, Router} from "express";
-const address = [{id: 1, value: "Moskov"}, {id: 2,value: 'Vladivostok'}]
-
+import {addressRepositiry} from "../repositories/address-repositiry";
 
 export const addressesRouter = Router({})
 
+// добавление нового поста
 addressesRouter.post('/', (req: Request, res: Response) => {
-    let newPostAddress = {
-        id: 10,
-        value: req.body.value
-    }
-    address.push(newPostAddress)
-    res.status(200).send(newPostAddress)
+    let newAddress = addressRepositiry.createNewAddress(req.body.value)
+    res.send(newAddress)
 })
 
 
-
-addressesRouter.get('/:idUser', (req: Request, res: Response) => {
-    let UserId = req.params.idUser
-    let elementAddressId = address.find( a => a.id === +UserId)
-    if(elementAddressId){
-        res.send(elementAddressId)
-    }else{
-        res.send(404)
-    }
+// ищет по id адрес
+addressesRouter.get('/:id', (req: Request, res: Response) => {
+    let id = +req.params.id
+    let resultAdress = addressRepositiry.searchAdressById(id)
+    res.send(resultAdress)
 })
+
 
 addressesRouter.put('/:id', (req: Request, res: Response) => {
-    let addressUpdate = address.find(p => p.id === +req.params.id)
-    if(addressUpdate){
-        addressUpdate.value = req.body.value
-        res.send(addressUpdate)
-    }
+    let id = +req.params.id
+    let value = req.body.value
+    let result =  addressRepositiry.updateAdress(id, value)
+    res.send(result)
 })
 
+// получение всех адресов
 addressesRouter.get('/', (req: Request, res: Response) => {
-    res.send(address)
+    res.send(addressRepositiry.getAdresses())
 })
-addressesRouter.delete('/:idUser', (req: Request, res: Response) => {
-    for(let i=0; i < address.length; i++){
-        if(address[i].id === +req.params.idUser){
-            address.splice(i, 1)
-            res.send(204)
 
-            return
-        }
-    }
+// удаление определенного адреса
+addressesRouter.delete('/:id', (req: Request, res: Response) => {
+    let id = +req.params.id
+    let result = addressRepositiry.deleteAdress(id)
 
-    res.send(404)
+    res.send(result)
 })
