@@ -6,8 +6,11 @@ export const productsRouter = Router({})
 
 // функция которая ищет продукты по query
 productsRouter.get('/', (req: Request, res: Response) => {
-    const foundProducts = productsRepositiry.findProducts(req.query.title ? req.query.title.toString() : null)
-    res.send(foundProducts).status(400)
+    // @ts-ignore
+    const blabla = req.blabla
+    res.send({value: blabla})
+    // const foundProducts = productsRepositiry.findProducts(req.query.title ? req.query.title.toString() : null)
+    // res.send(foundProducts).status(400)
 })
 
 productsRouter.put('/:id', (req: Request, res: Response) => {
